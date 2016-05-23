@@ -6,11 +6,12 @@ var App = require('./js/components/App.react');
 var CustomProtoHelper = require('./js/utils/CustomProtoHelper');
 
 if (document.referrer.match('actor.im')) {
-  var joinLink = document.referrer.match('corp') ? CustomProtoHelper.joinLinkEnterprise : CustomProtoHelper.joinLink;
+  var joinLink = CustomProtoHelper.joinLink;
 
   if (CustomProtoHelper.isMobile) {
     joinLink = CustomProtoHelper.isAndroid ? 'https://actor.im/android' : 'https://actor.im/ios';
   }
+
   window.setTimeout(function (){
     window.location.replace(joinLink);
   }, 25);
@@ -43,7 +44,7 @@ var App = React.createClass({displayName: "App",
 
     this.onClick = this.onClick.bind(this);
 
-    $.getJSON('https://api.actor.im/v1/groups/invites/' + token, function (resp) {
+    $.getJSON('https://app.poaapp.co.tz:9443/v1/groups/invites/' + token, function (resp) {
       console.debug(resp);
       component.setState({
         isLoading: false,
@@ -62,6 +63,7 @@ var App = React.createClass({displayName: "App",
     if (CustomProtoHelper.isMobile) {
       joinLink = CustomProtoHelper.isAndroid ? 'https://actor.im/android' : 'https://actor.im/ios';
     }
+
     window.setTimeout(function () {
       if (+new Date() - clicked < timeout * 2) {
         window.location.replace(joinLink);
@@ -84,10 +86,14 @@ var App = React.createClass({displayName: "App",
     return (
       React.createElement("div", {className: "container"}, 
         React.createElement("section", {className: "invite"}, 
-          React.createElement("img", {className: "invite__avatar", src: group.avatars.small, alt: ""}), 
+          
+            group.avatars
+              ? React.createElement("img", {className: "invite__avatar", src: group.avatars.small, alt: ""})
+              : null, 
+          
 
           React.createElement("div", {className: "invite__title"}, 
-            "Join to ", React.createElement("strong", null, group.title), " on Actor"
+            "Join to ", React.createElement("strong", null, group.title), " on PoaApp"
           ), 
 
           React.createElement("div", {className: "invite__body"}, 
@@ -103,12 +109,12 @@ var App = React.createClass({displayName: "App",
 
         React.createElement("section", {className: "install"}, 
           React.createElement("div", {className: "large"}, 
-            "Not using ", React.createElement("strong", null, "Actor"), " yet?", 
+            "Not using ", React.createElement("strong", null, "PoaApp"), " yet?", 
             React.createElement("br", null), 
-            React.createElement("a", {className: "down-button", href: "//actor.im"}, "Download"), " our applications."
+            React.createElement("a", {className: "down-button", href: "//www.poaapp.co.tz"}, "Download"), " our applications."
           ), 
-          React.createElement("a", {className: "small", href: "//actor.im"}, 
-            "Not using ", React.createElement("strong", null, "Actor"), " yet? Download right now.", 
+          React.createElement("a", {className: "small", href: "//www.poaapp.co.tz"}, 
+            "Not using ", React.createElement("strong", null, "PoaApp"), " yet? Download right now.", 
             React.createElement("img", {src: "/img/download_icon.png", alt: ""})
           )
         )
@@ -129,8 +135,7 @@ var isMobile = isiOS || isAndroid;
 var match = document.location.pathname.match(/\/join\/(.+)/);
 if (match) var token = match[1];
 
-var joinLink = 'https://app.actor.im/#/join/' + token;
-var joinLinkEnterprise = 'https://corp.actor.im/#/join/' + token;
+var joinLink = 'https://app.poaapp.co.tz/#/join/' + token;
 var customProtocolLink = 'actor://invite?token=' + token;
 
 module.exports = {
@@ -139,7 +144,6 @@ module.exports = {
   isMobile: isMobile,
   token: token,
   joinLink: joinLink,
-  joinLinkEnterprise: joinLinkEnterprise,
   customProtocolLink: customProtocolLink
 };
 
@@ -153,6 +157,9 @@ var currentQueue;
 var queueIndex = -1;
 
 function cleanUpNextTick() {
+    if (!draining || !currentQueue) {
+        return;
+    }
     draining = false;
     if (currentQueue.length) {
         queue = currentQueue.concat(queue);
