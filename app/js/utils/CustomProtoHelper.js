@@ -7,8 +7,7 @@ var isMobile = isiOS || isAndroid;
 var match = document.location.pathname.match(/\/join\/(.+)/);
 if (match) var token = match[1];
 
-var joinLink = 'https://app.actor.im/#/join/' + token;
-var joinLinkEnterprise = 'https://corp.actor.im/#/join/' + token;
+var joinLink = 'https://app.poaapp.co.tz/#/join/' + token;
 var customProtocolLink = 'actor://invite?token=' + token;
 
 module.exports = {
@@ -17,6 +16,5 @@ module.exports = {
   isMobile: isMobile,
   token: token,
   joinLink: joinLink,
-  joinLinkEnterprise: joinLinkEnterprise,
   customProtocolLink: customProtocolLink
 };

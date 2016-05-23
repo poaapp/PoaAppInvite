@@ -17,7 +17,7 @@ var App = React.createClass({
 
     this.onClick = this.onClick.bind(this);
 
-    $.getJSON('https://api.actor.im/v1/groups/invites/' + token, function (resp) {
+    $.getJSON('https://app.poaapp.co.tz:9443/v1/groups/invites/' + token, function (resp) {
       console.debug(resp);
       component.setState({
         isLoading: false,
@@ -36,6 +36,7 @@ var App = React.createClass({
     if (CustomProtoHelper.isMobile) {
       joinLink = CustomProtoHelper.isAndroid ? 'https://actor.im/android' : 'https://actor.im/ios';
     }
+
     window.setTimeout(function () {
       if (+new Date() - clicked < timeout * 2) {
         window.location.replace(joinLink);
@@ -58,10 +59,14 @@ var App = React.createClass({
     return (
       <div className="container">
         <section className="invite">
-          <img className="invite__avatar" src={group.avatars.small} alt=""/>
+          {
+            group.avatars
+              ? <img className="invite__avatar" src={group.avatars.small} alt=""/>
+              : null
+          }
 
           <div className="invite__title">
-            Join to <strong>{group.title}</strong> on Actor
+            Join to <strong>{group.title}</strong> on PoaApp
           </div>
 
           <div className="invite__body">
@@ -77,12 +82,12 @@ var App = React.createClass({
 
         <section className="install">
           <div className="large">
-            Not using <strong>Actor</strong> yet?
+            Not using <strong>PoaApp</strong> yet?
             <br/>
-            <a className="down-button" href="//actor.im">Download</a> our applications.
+            <a className="down-button" href="//www.poaapp.co.tz">Download</a> our applications.
           </div>
-          <a className="small" href="//actor.im">
-            Not using <strong>Actor</strong> yet? Download right now.
+          <a className="small" href="//www.poaapp.co.tz">
+            Not using <strong>PoaApp</strong> yet? Download right now.
             <img src="/img/download_icon.png" alt=""/>
           </a>
         </section>
