@@ -4,7 +4,7 @@ var isiOS = navigator.userAgent.match('iPad') || navigator.userAgent.match('iPho
 var isAndroid = navigator.userAgent.match('Android');
 var isMobile = isiOS || isAndroid;
 
-var match = document.location.pathname.match(/\/join\/(.+)/);
+var match = document.location.hash.match(/\#\/join\/(.+)/);
 if (match) var token = match[1];
 
 var joinLink = 'https://app.poaapp.co.tz/#/join/' + token;
